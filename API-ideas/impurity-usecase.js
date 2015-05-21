@@ -6,7 +6,8 @@ function* getImpureAssignments(scope, ignore = new Set()) {
     yield {
       type: 'WithScope',
       // will point to w/e was in with($ref)
-      reference: scope.arguments().next().reference()
+      // since with scopes always have only 1 declaration use it
+      reference: scope.declarations().next().reference()
     };
   }
   if (!ignore.has('eval')) {
@@ -28,17 +29,19 @@ function* getImpureAssignments(scope, ignore = new Set()) {
     ignore.add(declaration.name);
   }
   for (let assignment of scope.assignments()) {
-    // get left most reference (root), ie: arr[0] => arr , a.x => a
-    let root = assignment.rootReference();
-    if (!ignore.has(root.name)) {
-      yield {
-        type: 'Assignment',
-        assignment: assignment
+    // get left most variable of the target, ie: arr[0] => arr , a.x => a , ({}) => null
+    let variable = assignment.variableRoot;
+    if (variable != null) {
+      if (!ignore.has(ast.name)) {
+        yield {
+          type: 'Assignment',
+          assignment
+        }
       }
     }
   }
   for (let subscope of scope.childScopes()) {
-    yield* getImpureAssignments(subscope, ignore);
+    yield* getImpureAssignments(subscope, new Set(ignore));
   }
 }
 

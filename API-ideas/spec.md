@@ -7,6 +7,7 @@ Script implements ScopeContainer {
   Script parent = null;
 }
 Scope implements ScopeContainer {
+  {WITH,GLOBAL,FUNCTION,BLOCK,CATCH} type;
   Assignment *assignments();
   Calculation *calculations();
   Call *calls();
@@ -18,12 +19,16 @@ Scope implements ScopeContainer {
 Reference {
   {LITERAL,MEMBER,COMPLETION} type;
   Reference child;
+  // LITERAL => Literal
+  // MEMBER => Identifier, MemberExpression
+  // COMPLETION => CallExpression
   Node ast;
 }
 Calculation {
   Reference value;
 }
 Assignment implements Calculation {
+  Variable? variableRoot;
   Reference target;
 }
 Call {
@@ -39,6 +44,7 @@ ScriptLocation implements ComparableLocation<Location> {
 }
 Variable {
   Scope bindingScope;
+  {ARGUMENT,CATCH,LET,VAR} type;
   String name;
   ScriptLocation definition;
 }
