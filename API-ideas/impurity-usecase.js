@@ -14,7 +14,7 @@ function* getImpureAssignments(scope, ignore = new Set()) {
       let reference = call.reference();
       // calculation = property access, function invocation
       // literal = object literal of some form
-      if (reference.child() === null && reference.literal() === null && reference.name === 'eval') {
+      if (reference.child() === null && reference.ast.type === 'Identifier' && reference.ast.name === 'eval') {
         yield {
           type: 'eval',
           // will point to w/e was in with($ref)

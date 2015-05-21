@@ -1,3 +1,4 @@
+* http://babeljs.io/docs/usage/plugins/
 * https://www.npmjs.com/package/callbackhell
 * http://npm.im/scoped
 * http://didact.us/essim
