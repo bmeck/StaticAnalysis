@@ -1,4 +1,6 @@
 # StaticAnalysis
+
+[![Join the chat at https://gitter.im/bmeck/StaticAnalysis](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bmeck/StaticAnalysis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Static Analysis Spec for JS
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bmeck/StaticAnalysis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
