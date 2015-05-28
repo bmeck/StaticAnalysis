@@ -1,58 +1,63 @@
-```
-ScopeContainer {
-  Scope *childScopes();
+// ALL OPERATIONS RUN ON LOOKUP
+// implementing well known types (Map/Set)
+// still results in lazy lookup
+ScopeMap implements Map<Number, Scope> {
 }
-Script implements ScopeContainer {
-  String name;
-  Script parent = null;
-}
-Scope implements ScopeContainer {
-  {WITH,GLOBAL,FUNCTION,BLOCK,CATCH} type;
-  Assignment *assignments();
-  Calculation *calculations();
-  Call *calls();
-  Variable *declarations();
-  Entry *entryPoints();
-  Completion *explicitCompletions();
-  // TODO Branch *branches()?
-}
-Reference {
-  {LITERAL,MEMBER,COMPLETION} type;
-  Reference child;
-  // LITERAL => Literal
-  // MEMBER => Identifier, MemberExpression
-  // COMPLETION => CallExpression
-  Node ast;
+Step {
+  // list of steps that could lead to this one
+  // steps could be ahead of this step
+  StepSet origins();
+  ScriptLocation location();
+  Calculation effect();
+  BranchSet branches();
 }
 Calculation {
-  Reference value;
+  Operation operation();
+  OperandSet operands();
 }
-Assignment implements Calculation {
-  Variable? variableRoot;
-  Reference target;
+OperandSet implements Set<Operand> {
 }
-Call {
-  // TODO
+Operand {
+  // REFERENCE => Reference, from spec : 6.2.3
+  // LITERAL => Value, use the value
+  // RESULT => Step, grab from other Calc
+  {REFERENCE,LITERAL,RESULT} type();
+  Value value;
+}
+Reference {
+  // env records should use a constant as the base?
+  Value base;
+  String name;
+  Boolean strict;
+}
+StepSet implements Set<Step> {
+}
+BranchSet implements Set<Branch> {
+}
+Branch {
+  // branch with higher priority than this one
+  Branch primary();
+  Calculation condition();
+  Step target;
+}
+Scope implements ScopeContainer{
+  {LOCAL,FUNCTION,DYNAMIC} type();
+  StepSet steps();
+  ScopeMap children();
+  BindingMap bindings();
+}
+BindingMap implements Map<String, Binding> {
+}
+Binding {
+  // things like fn f(x) => arguments[0] , x
+  // calculation should return what needs to have it's binding updated
+  CalculationSet mirrors();
+}
+Script implements ScopeContainer {
+  String name();
+  // see eval/Function
+  Script parent();
 }
 ComparableLocation<Type> {
   {BEFORE,SAME,AFTER,UNRELATED} compareLocationTo(Type other);
 }
-ScriptLocation implements ComparableLocation<Location> {
-  Script script;
-  Number line;
-  Number column;
-}
-Variable {
-  Scope bindingScope;
-  {ARGUMENT,CATCH,LET,VAR} type;
-  String name;
-  ScriptLocation definition;
-}
-Entry {
-  Scope scope;
-  ScriptLocation location;
-}
-Completion implements Calculation {
-  {RETURN,THROW,YIELD} type;
-}
-```
