@@ -6,3 +6,6 @@
 * https://github.com/indutny/spoon
 * https://github.com/js-js/jit.js
 * http://ternjs.net/
+
+Hydrogen IR
+* https://code.google.com/p/v8/source/browse/trunk/src/hydrogen-instructions.h
