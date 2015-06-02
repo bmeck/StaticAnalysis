@@ -9,3 +9,4 @@
 
 Hydrogen IR
 * https://code.google.com/p/v8/source/browse/trunk/src/hydrogen-instructions.h
+* http://thlorenz.com/v8-dox/build/v8-3.14.5/html/d6/d0d/classv8_1_1internal_1_1_h_value.html
