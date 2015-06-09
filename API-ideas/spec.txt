@@ -11,6 +11,9 @@ Step {
   StepSet origins();
   ScriptLocation location();
   Calculation effect();
+  // where to store the result, could be a "hidden" variable
+  // spec 8.1.1 
+  EnvironmentRecord storage();
   BranchSet branches();
 }
 
@@ -22,16 +25,20 @@ Calculation {
 OperandSet implements Set<Operand> {
 }
 
+// Well known references?
+// - CompletionRecord 6.2.2
+// - This 
+// - Arguments
 Operand {
   // REFERENCE => Reference, from spec : 6.2.3
   // LITERAL => Value, use the value
-  // RESULT => Step, grab from other Calc
-  {REFERENCE,LITERAL,RESULT} type();
+  {REFERENCE,LITERAL} type();
   Value value;
 }
 
 Reference {
   // env records should use a constant as the base?
+  // special hidden variables use an EnvironmentRecord
   Value base;
   String name;
   Boolean strict;
@@ -50,8 +57,9 @@ Branch {
   Step target;
 }
 
+// Roughly a Lexical Environment from spec 6.2.5
 Block implements BlockContainer{
-  {LOCAL,FUNCTION,DYNAMIC} type();
+  {LOCAL,FUNCTION,DYNAMIC,SCRIPT,MODULE} type();
   StepSet steps();
   BlockMap children();
   BindingMap bindings();
